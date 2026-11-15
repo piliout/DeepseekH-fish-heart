@@ -1,0 +1,17 @@
+{
+  "name": "fish-heart",
+  "version": "0.1.0",
+  "description": "DSH 情绪状态记录插件：七维情绪 + 五档状态 + 念头 + 作息（只记录、不注入）",
+  "type": "module",
+  "main": "./lib/index.js",
+  "license": "MIT",
+  "keywords": ["dsh", "dsh-plugin", "emotion", "persona", "mood", "companion"],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "dependencies": {
+    "@deepseek-ai/schemastery": "^3.18.1"
+  }
+}

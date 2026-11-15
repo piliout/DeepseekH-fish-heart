@@ -1,0 +1,8 @@
+# fish-heart 情绪记录
+# entry 的 id 必须等于 settings 命名空间名（`fish-heart`）：
+# DSH 0.2.x 的 settings 定位靠 `entry.options.id === ns`，id 与包名不同名会导致
+# settings/describe 找不到该命名空间。`name` 仍是包名 fish-heart，二者职责不同。
+- insert:
+    - id: fish-heart
+      name: fish-heart
+      config: {}
