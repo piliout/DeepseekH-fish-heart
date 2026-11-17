@@ -1,7 +1,7 @@
 {
   "name": "fish-heart",
-  "version": "0.1.0",
-  "description": "DSH 情绪状态记录插件：七维情绪 + 五档状态 + 念头 + 作息（只记录、不注入）",
+  "version": "0.2.0",
+  "description": "DSH 情绪状态记录插件：七维情绪 + 六档状态（含「闷」）+ 念头 + 作息（只记录、不注入）",
   "type": "module",
   "main": "./lib/index.js",
   "license": "MIT",

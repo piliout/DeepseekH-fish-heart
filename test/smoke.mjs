@@ -126,6 +126,39 @@ check('deriveTier 阈值映射正确', () => {
   s.blamePressure = 85; assert.equal(deriveTier(s), 'avoidant');
 });
 
+check('deriveTier 45–65 按亲密分叉：亲密≥60 判闷，掉了才是生气', () => {
+  const s = createState();
+  s.blamePressure = 55;
+  s.dims.intimacy = 100; assert.equal(deriveTier(s), 'sullen');  // 责怪高但还亲近 → 闷
+  s.dims.intimacy = 60;  assert.equal(deriveTier(s), 'sullen');  // 边界含等号
+  s.dims.intimacy = 59;  assert.equal(deriveTier(s), 'angry');   // 亲密掉了 → 真生气
+  s.dims.intimacy = 20;  assert.equal(deriveTier(s), 'angry');
+  // 分叉只在 45–65 生效，别的档位不受亲密影响
+  s.dims.intimacy = 100;
+  s.blamePressure = 30; assert.equal(deriveTier(s), 'wronged');
+  s.blamePressure = 70; assert.equal(deriveTier(s), 'afraid');
+  s.blamePressure = 85; assert.equal(deriveTier(s), 'avoidant');
+});
+
+check('hug 也降责怪压力（抱一下该消点气）', () => {
+  const s = createState();
+  s.blamePressure = 20;
+  applyEvent(s, { kind: 'hug' });
+  assert.equal(s.blamePressure, 10, 'hug 应降 10，实际 ' + s.blamePressure);
+  // 抱到底也不会变成负数
+  for (let i = 0; i < 5; i += 1) applyEvent(s, { kind: 'hug' });
+  assert.equal(s.blamePressure, 0);
+});
+
+check('comfort 降得比 hug 多（正式道歉 > 单纯抱抱）', () => {
+  const a = createState(); a.blamePressure = 60;
+  applyEvent(a, { kind: 'comfort' });
+  const b = createState(); b.blamePressure = 60;
+  applyEvent(b, { kind: 'hug' });
+  assert.ok(a.blamePressure < b.blamePressure,
+    '道歉后 ' + a.blamePressure + ' 应低于抱抱后 ' + b.blamePressure);
+});
+
 check('持久化往返一致', () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'fish-heart-'));
   const f = path.join(dir, 'state.json');
